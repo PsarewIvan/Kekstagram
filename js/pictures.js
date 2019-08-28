@@ -16,6 +16,9 @@ var descriptionTemplate = [
   'Цените каждое мгновенье. Цените тех, кто рядом с вами и отгоняйте все сомненья. Не обижайте всех словами......',
   'Вот это тачка!'
 ];
+var photosDomParent = document.querySelector('.pictures');
+var template = document.querySelector('#picture-template')
+    .content.querySelector('.picture');
 var numberOfPhoto = 25;
 var minLikes = 15;
 var maxLikes = 200;
@@ -34,16 +37,33 @@ var getRandomNumber = function(min, max) {
   return Math.floor(min + Math.random() * (max + 1 - min));
 };
 var getPhotos = function(count) {
-  var photo = [];
+  var photos = [];
   for (var i = 0; i < count; i++) {
-    photo[i] = {
-      url: 'img/' + (i + 1) + '.jpg',
+    photos[i] = {
+      url: 'photos/' + (i + 1) + '.jpg',
       likes: getRandomNumber(minLikes, maxLikes),
       comments: getRandomComments(commentsTemplate),
       description: getRandomArrayValue(descriptionTemplate)
     }
   }
-  return photo;
+  return photos;
+};
+var buildPhoto = function(photo) {
+  var element = template.cloneNode(true);
+  element.querySelector('img').setAttribute('src', photo.url);
+  element.querySelector('.picture-likes').textContent = photo.likes;
+  element.querySelector('.picture-comments').textContent = photo.comments;
+  return element;
+};
+var fillingPhotosDomBlock = function(count) {
+  var fragment = document.createDocumentFragment();
+  var photos = getPhotos(count);
+  for (var i = 0; i < count; i++) {
+    fragment.appendChild(buildPhoto(photos[i]));
+  }
+  return fragment;
 };
 
-console.log(getPhotos(numberOfPhoto));
+photosDomParent.appendChild(fillingPhotosDomBlock(numberOfPhoto));
+
+console.log(fillingPhotosDomBlock(numberOfPhoto));
