@@ -1,0 +1,7 @@
+.vscode/
+cart/
+*.ai
+*.log
+*.pdf
+*.psd
+Thumbs.db
