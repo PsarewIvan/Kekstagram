@@ -115,6 +115,8 @@ var photos = getPhotos(numberOfPhoto);
 fillingBigPicture(photos[0]);
 photosDomParent.appendChild(fillingPhotosDomBlock(numberOfPhoto, photos));
 document.querySelector('.big-picture').classList.remove('hidden');
+document.querySelector('.social__comment-count').classList.add('visually-hidden');
+document.querySelector('.social__comments-loader').classList.add('visually-hidden');
 
 console.log(getRandomArrayIndex(commentsTemplate));
 console.log(getRandomComments(commentsTemplate));
