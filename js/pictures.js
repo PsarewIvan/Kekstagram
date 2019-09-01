@@ -17,8 +17,10 @@ var descriptionTemplate = [
   'Вот это тачка!'
 ];
 var photosDomParent = document.querySelector('.pictures');
-var template = document.querySelector('#picture')
+var templateImg = document.querySelector('#picture')
     .content.querySelector('.picture');
+var templateComments = document.querySelector('#comments')
+    .content.querySelector('.social__comment');
 var numberOfPhoto = 25;
 var minLikes = 15;
 var maxLikes = 200;
@@ -68,26 +70,52 @@ var getPhotos = function(count) {
 
 // Конструктор блоков с фото по шаблону
 var buildPhoto = function(photo) {
-  var element = template.cloneNode(true);
+  var element = templateImg.cloneNode(true);
   element.querySelector('.picture__img').setAttribute('src', photo.url);
   element.querySelector('.picture__likes').textContent = photo.likes;
   element.querySelector('.picture__comments').textContent = photo.comments.length;
   return element;
 };
 
-// Заполнение DOM случайными фото
-var fillingPhotosDomBlock = function(count) {
+// Генерируем комментарии к болшьшой картинке
+var buildComments = function(photoComment) {
+  var element = templateComments.cloneNode(true);
+  element.querySelector('.social__text').textContent = photoComment;
+  element.querySelector('.social__picture')
+      .setAttribute('src', ('img/avatar-' + getRandomNumber(1, 6) + '.svg'));
+  return element;
+}
+
+// Заполнение большой картинки первым сгенерированным элементом
+var fillingBigPicture = function(firstPhoto) {
   var fragment = document.createDocumentFragment();
-  var photos = getPhotos(count);
+  for (var i = 0; i < firstPhoto.comments.length; i++) {
+    fragment.appendChild(buildComments(firstPhoto.comments[i]));
+  }
+  document.querySelector('.big-picture__img')
+      .querySelector('img')
+      .setAttribute('src', firstPhoto.url);
+  document.querySelector('.likes-count').textContent = firstPhoto.likes;
+  document.querySelector('.social__caption').textContent = firstPhoto.description;
+  document.querySelector('.comments-count').textContent = firstPhoto.comments.length;
+  document.querySelector('.social__comments')
+      .appendChild(fragment);
+};
+
+// Заполнение DOM случайными фото
+var fillingPhotosDomBlock = function(count, photos) {
+  var fragment = document.createDocumentFragment();
   for (var i = 0; i < count; i++) {
     fragment.appendChild(buildPhoto(photos[i]));
   }
   return fragment;
 };
 
-photosDomParent.appendChild(fillingPhotosDomBlock(numberOfPhoto));
+var photos = getPhotos(numberOfPhoto);
+fillingBigPicture(photos[0]);
+photosDomParent.appendChild(fillingPhotosDomBlock(numberOfPhoto, photos));
 document.querySelector('.big-picture').classList.remove('hidden');
 
 console.log(getRandomArrayIndex(commentsTemplate));
 console.log(getRandomComments(commentsTemplate));
-console.log(getPhotos(4));
+console.log(photos);
