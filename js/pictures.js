@@ -114,10 +114,36 @@ var fillingPhotosDomBlock = function(count, photos) {
 var photos = getPhotos(numberOfPhoto);
 fillingBigPicture(photos[0]);
 photosDomParent.appendChild(fillingPhotosDomBlock(numberOfPhoto, photos));
-document.querySelector('.big-picture').classList.remove('hidden');
-document.querySelector('.social__comment-count').classList.add('visually-hidden');
-document.querySelector('.social__comments-loader').classList.add('visually-hidden');
+// document.querySelector('.big-picture').classList.remove('hidden');
+// document.querySelector('.social__comment-count').classList.add('visually-hidden');
+// document.querySelector('.social__comments-loader').classList.add('visually-hidden');
 
-console.log(getRandomArrayIndex(commentsTemplate));
-console.log(getRandomComments(commentsTemplate));
-console.log(photos);
+// Показ загруженного изображения пользователем
+var imgPopupUploadButton = document.querySelector('.img-upload__overlay');
+var imgPopupCloseButton = document.querySelector('#upload-cancel');
+var imgUploadButton = document.querySelector('#upload-file');
+
+var showImgUploadPopup = function() {
+  imgPopupUploadButton.classList.remove('hidden');
+};
+
+var closeImgUploadPopup = function() {
+  imgPopupUploadButton.classList.add('hidden');
+}
+
+imgUploadButton.addEventListener('change', function() {
+  if (this.files[0]) {
+    var fr = new FileReader();
+
+    fr.addEventListener('load', function() {
+      document.querySelector('.js__user-upload-img').setAttribute('src', fr.result);
+      showImgUploadPopup();
+    }, false);
+
+    fr.readAsDataURL(this.files[0]);
+  }
+});
+
+imgPopupCloseButton.addEventListener('click' , function() {
+  closeImgUploadPopup();
+})
