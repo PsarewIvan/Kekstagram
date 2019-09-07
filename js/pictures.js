@@ -122,14 +122,23 @@ photosDomParent.appendChild(fillingPhotosDomBlock(numberOfPhoto, photos));
 var imgPopupUploadButton = document.querySelector('.img-upload__overlay');
 var imgPopupCloseButton = document.querySelector('#upload-cancel');
 var imgUploadButton = document.querySelector('#upload-file');
+var ESC_KEYCODE = 27;
 
 var showImgUploadPopup = function() {
   imgPopupUploadButton.classList.remove('hidden');
+  document.addEventListener('keydown', onImgPopupEscPress);
 };
 
 var closeImgUploadPopup = function() {
   imgPopupUploadButton.classList.add('hidden');
+  document.removeEventListener('keydown', onImgPopupEscPress);
 }
+
+var onImgPopupEscPress = function(evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closeImgUploadPopup();
+  }
+};
 
 imgUploadButton.addEventListener('change', function() {
   if (this.files[0]) {
