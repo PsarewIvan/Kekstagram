@@ -132,6 +132,8 @@ var showImgUploadPopup = function() {
 var closeImgUploadPopup = function() {
   imgPopupUploadButton.classList.add('hidden');
   document.removeEventListener('keydown', onImgPopupEscPress);
+  document.querySelector('.js__user-upload-img').removeAttribute('style');
+  document.querySelector('.scale__control--value').setAttribute('value', '100%');
 }
 
 var onImgPopupEscPress = function(evt) {
@@ -156,3 +158,38 @@ imgUploadButton.addEventListener('change', function() {
 imgPopupCloseButton.addEventListener('click' , function() {
   closeImgUploadPopup();
 })
+
+// Редактируем масштаб загружаемого изображения
+var buttonImgScaleSmaller = document.querySelector('.scale__control--smaller');
+var buttonImgScaleBigger = document.querySelector('.scale__control--bigger');
+var imgScaleValue = document.querySelector('.scale__control--value');
+var userUploadImg = document.querySelector('.js__user-upload-img');
+var MIN_IMG_SCALE = 25;
+var MAX_IMG_SCALE = 100;
+var IMG_SCALE_STEP = 25;
+
+var doImgScaleSmaller = function() {
+  var scaleValue = +imgScaleValue.getAttribute('value').slice(0, -1);
+  if (scaleValue > MIN_IMG_SCALE) {
+    var newScaleValue = scaleValue - IMG_SCALE_STEP;
+    imgScaleValue.setAttribute('value', newScaleValue + '%');
+    userUploadImg.setAttribute('style', 'transform: scale(' + newScaleValue / 100 + ')');
+  }
+};
+
+var doImgScaleBigger = function() {
+  var scaleValue = +imgScaleValue.getAttribute('value').slice(0, -1);
+  if (scaleValue < MAX_IMG_SCALE) {
+    var newScaleValue = scaleValue + IMG_SCALE_STEP;
+    imgScaleValue.setAttribute('value', newScaleValue + '%');
+    userUploadImg.setAttribute('style', 'transform: scale(' + newScaleValue / 100 + ')');
+  }
+};
+
+buttonImgScaleSmaller.addEventListener('click', function() {
+  doImgScaleSmaller();
+});
+
+buttonImgScaleBigger.addEventListener('click', function() {
+  doImgScaleBigger();
+});
