@@ -1,0 +1,22 @@
+{
+  "name": "kekstagram",
+  "version": "1.0.0",
+  "description": "Учебный проект HTML Academy",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PsarewIvan/Kekstagram.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PsarewIvan/Kekstagram/issues"
+  },
+  "homepage": "https://github.com/PsarewIvan/Kekstagram#readme",
+  "devDependencies": {
+    "eslint": "^6.3.0"
+  }
+}

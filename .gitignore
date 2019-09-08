@@ -1,5 +1,6 @@
 .vscode/
 cart/
+node_modules/
 *.ai
 *.log
 *.pdf
