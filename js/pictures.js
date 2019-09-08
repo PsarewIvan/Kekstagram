@@ -193,3 +193,51 @@ buttonImgScaleSmaller.addEventListener('click', function() {
 buttonImgScaleBigger.addEventListener('click', function() {
   doImgScaleBigger();
 });
+
+// Наложение эффекта на изображение
+var effectsList = document.querySelector('.img-upload__effects');
+var effectSlider = document.querySelector('.img-upload__effect-level');
+
+var removeImgEffects = function() {
+  userUploadImg.classList.remove('effects__preview--chrome',
+                                  'effects__preview--sepia',
+                                  'effects__preview--marvin',
+                                  'effects__preview--phobos',
+                                  'effects__preview--heat'
+  );
+};
+
+var addEffectClassMod = function(mod) {
+  effectSlider.classList.remove('hidden');
+  userUploadImg.classList.add('effects__preview--' + mod)
+};
+
+var hideEffectSlider = function() {
+  effectSlider.classList.add('hidden');
+}
+
+var changeImgEffects = function(evt) {
+  if (evt.target.value == 'none') {
+    removeImgEffects();
+    hideEffectSlider();
+  } else if (evt.target.value == 'chrome') {
+    addEffectClassMod('chrome')
+  } else if (evt.target.value == 'sepia') {
+    addEffectClassMod('sepia')
+  } else if (evt.target.value == 'marvin') {
+    addEffectClassMod('marvin')
+  } else if (evt.target.value == 'phobos') {
+    addEffectClassMod('phobos')
+  } else if (evt.target.value == 'heat') {
+    addEffectClassMod('heat')
+  } else {
+    removeImgEffects();
+  }
+};
+
+effectsList.addEventListener('click', function(evt) {
+  if (evt.target.name == 'effect') {
+    removeImgEffects();
+    changeImgEffects(evt);
+  }
+});
