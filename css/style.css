@@ -459,7 +459,7 @@ main {
 
 .scale__control:hover,
 .scale__control:focus {
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(0, 0, 0, 0.35);
 }
 
 .scale__control:active {
