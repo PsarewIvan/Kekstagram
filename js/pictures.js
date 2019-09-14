@@ -103,10 +103,10 @@ var fillingBigPicture = function(firstPhoto) {
 };
 
 // Заполнение DOM случайными фото
-var fillingPhotosDomBlock = function(count, photos) {
+var fillingPhotosDomBlock = function(count, photosPar) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < count; i++) {
-    fragment.appendChild(buildPhoto(photos[i]));
+    fragment.appendChild(buildPhoto(photosPar[i]));
   }
   return fragment;
 };
