@@ -25,6 +25,8 @@ var numberOfPhoto = 25;
 var minLikes = 15;
 var maxLikes = 200;
 
+var ESC_KEYCODE = 27;
+
 // Случайный индекс массива array
 var getRandomArrayIndex = function(array) {
   return Math.floor(Math.random() * array.length);
@@ -62,7 +64,8 @@ var getPhotos = function(count) {
       url: 'photos/' + (i + 1) + '.jpg',
       likes: getRandomNumber(minLikes, maxLikes),
       comments: getRandomComments(commentsTemplate, getRandomNumber(1, 2)),
-      description: descriptionTemplate[getRandomArrayIndex(descriptionTemplate)]
+      description: descriptionTemplate[getRandomArrayIndex(descriptionTemplate)],
+      index: i
     }
   }
   return photos;
@@ -72,6 +75,7 @@ var getPhotos = function(count) {
 var buildPhoto = function(photo) {
   var element = templateImg.cloneNode(true);
   element.querySelector('.picture__img').setAttribute('src', photo.url);
+  element.querySelector('.picture__img').setAttribute('data-index', photo.index);
   element.querySelector('.picture__likes').textContent = photo.likes;
   element.querySelector('.picture__comments').textContent = photo.comments.length;
   return element;
@@ -86,7 +90,7 @@ var buildComments = function(photoComment) {
   return element;
 }
 
-// Заполнение большой картинки первым сгенерированным элементом
+// Заполнение большой картинки сгенерированным элементом
 var fillingBigPicture = function(firstPhoto) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < firstPhoto.comments.length; i++) {
@@ -98,8 +102,8 @@ var fillingBigPicture = function(firstPhoto) {
   document.querySelector('.likes-count').textContent = firstPhoto.likes;
   document.querySelector('.social__caption').textContent = firstPhoto.description;
   document.querySelector('.comments-count').textContent = firstPhoto.comments.length;
-  document.querySelector('.social__comments')
-      .appendChild(fragment);
+  document.querySelector('.social__comments').innerHTML = '';
+  document.querySelector('.social__comments').appendChild(fragment);
 };
 
 // Заполнение DOM случайными фото
@@ -111,18 +115,49 @@ var fillingPhotosDomBlock = function(count, photosPar) {
   return fragment;
 };
 
+// Создаем массив случайных фото
 var photos = getPhotos(numberOfPhoto);
-fillingBigPicture(photos[0]);
+
+// Вставка случайных миниатюр
 photosDomParent.appendChild(fillingPhotosDomBlock(numberOfPhoto, photos));
-// document.querySelector('.big-picture').classList.remove('hidden');
-// document.querySelector('.social__comment-count').classList.add('visually-hidden');
-// document.querySelector('.social__comments-loader').classList.add('visually-hidden');
+
+// Показ большой превьюшки по клику на миниатюру
+var userImgList = document.querySelector('.pictures');
+var bigPictureCloseButton = document.querySelector('.big-picture__cancel');
+
+var showBigPicture = function() {
+  document.querySelector('.big-picture').classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  document.addEventListener('keydown', onBigPictureEscPress);
+  bigPictureCloseButton.addEventListener('click', function() {
+    closeBigPicture();
+  });
+};
+
+var onBigPictureEscPress = function(evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closeBigPicture();
+  }
+};
+
+var closeBigPicture = function() {
+  document.querySelector('.big-picture').classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  document.removeEventListener('keydown', onBigPictureEscPress);
+};
+
+userImgList.addEventListener('click', function(evt) {
+  fillingBigPicture(photos[evt.target.dataset.index]);
+  showBigPicture();
+});
+
+
+
 
 // Показ загруженного изображения пользователем
 var imgPopupUploadButton = document.querySelector('.img-upload__overlay');
 var imgPopupCloseButton = document.querySelector('#upload-cancel');
 var imgUploadButton = document.querySelector('#upload-file');
-var ESC_KEYCODE = 27;
 
 var showImgUploadPopup = function() {
   imgPopupUploadButton.classList.remove('hidden');
