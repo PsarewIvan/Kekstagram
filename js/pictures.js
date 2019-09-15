@@ -287,3 +287,47 @@ effectsList.addEventListener('click', function(evt) {
     changeImgEffects(evt);
   }
 });
+
+
+// Валидация формы
+var customValidation = function() { };
+
+customValidation.prototype = {
+  invalidities: [],  // Массив с сообщениями об ошибках
+
+  doHashArray: function(input) {  // Разбиваем строку по пробелам на массив
+    // Эта штука разбивает строку на массивы по пробелам и
+    // удаляет пустые значения массива, если между словами
+    // было больше одного пробела. да...
+    return input.split(/\s/).filter(function(value) {return value});
+  },
+
+  isHashBegin: function(input) {
+    var isHashTrue = function(hash) {
+      return hash[0] == '#';
+    };
+    console.log(this.doHashArray(input).every(isHashTrue));
+    return this.doHashArray(input).every(isHashTrue);
+  },
+
+  checkValidity: function(input) {
+    if (this.isHashBegin(input)) {
+      this.addInvalidity('Хэштег должен начинаться с символа #');
+    }
+  },
+
+  // Добавляем сообщение об ошибке в массив ошибок
+  addInvalidity: function(message) {
+    this.invalidities.push(message);
+  },
+
+  // Получаем общий текст сообщений об ошибках
+  getInvalidities: function() {
+    return this.invalidities.join('. \n');
+  }
+};
+
+
+var hash = '#a #aa';
+var inputCustomValidation = new customValidation();
+inputCustomValidation.checkValidity(hash);
