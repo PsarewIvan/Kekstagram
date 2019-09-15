@@ -147,8 +147,10 @@ var closeBigPicture = function() {
 };
 
 userImgList.addEventListener('click', function(evt) {
-  fillingBigPicture(photos[evt.target.dataset.index]);
-  showBigPicture();
+  if (evt.target.className == 'picture__img') {
+    showBigPicture();
+    fillingBigPicture(photos[evt.target.dataset.index]);
+  }
 });
 
 
