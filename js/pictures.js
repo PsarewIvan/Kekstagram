@@ -64,7 +64,7 @@ var getPhotos = function(count) {
     photos[i] = {
       url: 'photos/' + (i + 1) + '.jpg',
       likes: getRandomNumber(minLikes, maxLikes),
-      comments: getRandomComments(commentsTemplate, getRandomNumber(1, 2)),
+      comments: getRandomComments(commentsTemplate, getRandomNumber(1, commentsTemplate.length)),
       description: descriptionTemplate[getRandomArrayIndex(descriptionTemplate)],
       index: i
     }
@@ -82,7 +82,7 @@ var buildPhoto = function(photo) {
   return element;
 };
 
-// Генерируем комментарии к болшьшой картинке
+// Собираем комментарии к болшьшой картинке по шаблону
 var buildComments = function(photoComment) {
   var element = templateComments.cloneNode(true);
   element.querySelector('.social__text').textContent = photoComment;
@@ -94,7 +94,7 @@ var buildComments = function(photoComment) {
 // Заполнение большой картинки сгенерированным элементом
 var fillingBigPicture = function(firstPhoto) {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < firstPhoto.comments.length; i++) {
+  for (var i = 0; i < firstPhoto.comments.length && i < 5; i++) {
     fragment.appendChild(buildComments(firstPhoto.comments[i]));
   }
   document.querySelector('.big-picture__img')
