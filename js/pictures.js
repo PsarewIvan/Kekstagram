@@ -302,22 +302,47 @@ customValidation.prototype = {
     return input.split(/\s/).filter(function(value) {return value});
   },
 
+  // Проверка на то, что хэштег начинается с #
   isHashBegin: function(input) {
-    var isHashTrue = function(hash) {
+    var isHashBegin = function(hash) {
       return hash[0] == '#';
     };
-    console.log(this.doHashArray(input).every(isHashTrue));
-    return this.doHashArray(input).every(isHashTrue);
+    return !this.doHashArray(input).every(isHashBegin);
+  },
+
+  // Проверка на то, что хэштег не пустой
+  isHashFull: function(input) {
+    var isHashEmpty = function(hash) {
+      return hash != '#';
+    };
+    return !this.doHashArray(input).every(isHashEmpty);
+  },
+
+  // Проверка на то, что хэштеги разделяются пробелами
+  isHashNotSplited: function(input) {
+    var isHashSplited = function(hash) {
+      return !(hash.indexOf('#', 1) + 1);
+    };
+    return !this.doHashArray(input).every(isHashSplited);
   },
 
   checkValidity: function(input) {
     if (this.isHashBegin(input)) {
       this.addInvalidity('Хэштег должен начинаться с символа #');
     }
+
+    if (this.isHashFull(input)) {
+      this.addInvalidity('Хэштег не может состоять только из одной решётки');
+    }
+
+    if (this.isHashNotSplited(input)) {
+      this.addInvalidity('Хэштеги разделяются пробелами');
+    }
   },
 
   // Добавляем сообщение об ошибке в массив ошибок
   addInvalidity: function(message) {
+    console.log(message);
     this.invalidities.push(message);
   },
 
@@ -328,6 +353,6 @@ customValidation.prototype = {
 };
 
 
-var hash = '#a #aa';
+var hash = '#a #aaff ## aaa # #ss  #ff';
 var inputCustomValidation = new customValidation();
 inputCustomValidation.checkValidity(hash);
