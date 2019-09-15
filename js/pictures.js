@@ -26,6 +26,7 @@ var minLikes = 15;
 var maxLikes = 200;
 
 var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
 
 // Случайный индекс массива array
 var getRandomArrayIndex = function(array) {
@@ -150,6 +151,14 @@ userImgList.addEventListener('click', function(evt) {
   if (evt.target.className == 'picture__img') {
     showBigPicture();
     fillingBigPicture(photos[evt.target.dataset.index]);
+  }
+});
+
+document.addEventListener('keydown', function(evt) {
+  if (evt.keyCode == ENTER_KEYCODE &&
+      evt.target.querySelector('img').dataset.index) {
+    showBigPicture();
+    fillingBigPicture(photos[evt.target.querySelector('img').dataset.index]);
   }
 });
 
