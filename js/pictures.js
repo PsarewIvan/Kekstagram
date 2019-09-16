@@ -304,27 +304,23 @@ customValidation.prototype = {
 
   // Проверка на то, что хэштег начинается с #
   isHashBegin: function(input) {
-    var isHashBegin = function(hash) {
-      return hash[0] == '#';
-    };
-    return !this.doHashArray(input).every(isHashBegin);
+    return !this.doHashArray(input).every(hash => hash[0] == '#');
   },
 
   // Проверка на то, что хэштег не пустой
   isHashFull: function(input) {
-    var isHashEmpty = function(hash) {
-      return hash != '#';
-    };
-    return !this.doHashArray(input).every(isHashEmpty);
+    return !this.doHashArray(input).every(hash => hash != '#');
   },
 
   // Проверка на то, что хэштеги разделяются пробелами
   isHashNotSplited: function(input) {
-    var isHashSplited = function(hash) {
-      return !(hash.indexOf('#', 1) + 1);
-    };
-    return !this.doHashArray(input).every(isHashSplited);
+    return !this.doHashArray(input).every(hash => !(hash.indexOf('#', 1) + 1));
   },
+
+  // Проверка на то, что один и тот же хэштег не используется дважды
+  // isHashNotDouble: function(input) {
+
+  // },
 
   checkValidity: function(input) {
     if (this.isHashBegin(input)) {
@@ -353,6 +349,6 @@ customValidation.prototype = {
 };
 
 
-var hash = '#a #aaff ## aaa # #ss  #ff';
+var hash = '#a #aaff #ss #sss  #ff';
 var inputCustomValidation = new customValidation();
 inputCustomValidation.checkValidity(hash);
