@@ -318,9 +318,9 @@ customValidation.prototype = {
   },
 
   // Проверка на то, что один и тот же хэштег не используется дважды
-  // isHashNotDouble: function(input) {
-
-  // },
+  isHashNotDouble: function(input) {
+    return new Set(this.doHashArray(input)).size !== this.doHashArray(input).length;
+  },
 
   checkValidity: function(input) {
     if (this.isHashBegin(input)) {
@@ -333,6 +333,10 @@ customValidation.prototype = {
 
     if (this.isHashNotSplited(input)) {
       this.addInvalidity('Хэштеги разделяются пробелами');
+    }
+
+    if (this.isHashNotDouble(input)) {
+      this.addInvalidity('Один и тот же хэш-тег не может быть использован дважды');
     }
   },
 
@@ -349,6 +353,6 @@ customValidation.prototype = {
 };
 
 
-var hash = '#a #aaff #ss #sss  #ff';
+var hash = '#a #aaff #ss #ss  #ff';
 var inputCustomValidation = new customValidation();
 inputCustomValidation.checkValidity(hash);
