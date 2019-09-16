@@ -294,6 +294,8 @@ var customValidation = function() { };
 
 customValidation.prototype = {
   invalidities: [],  // Массив с сообщениями об ошибках
+  maxHashNumber: 5,  // Максимальное количесвто хэштегов
+  maxHashLength: 20, // Максимальная длина хэштега
 
   doHashArray: function(input) {  // Разбиваем строку по пробелам на массив
     // Эта штука разбивает строку на массивы по пробелам и
@@ -322,6 +324,12 @@ customValidation.prototype = {
     return new Set(this.doHashArray(input)).size !== this.doHashArray(input).length;
   },
 
+  // Проверка на то, введено не больше пяти хэштегов
+  isHashCrowded: function(input) {
+    console.log(this.doHashArray(input).length);
+    return this.doHashArray(input).length > this.maxHashNumber;
+  },
+
   checkValidity: function(input) {
     if (this.isHashBegin(input)) {
       this.addInvalidity('Хэштег должен начинаться с символа #');
@@ -338,6 +346,10 @@ customValidation.prototype = {
     if (this.isHashNotDouble(input)) {
       this.addInvalidity('Один и тот же хэш-тег не может быть использован дважды');
     }
+
+    if (this.isHashCrowded(input)) {
+      this.addInvalidity('Нельзя указать больше пяти хэш-тегов');
+    }
   },
 
   // Добавляем сообщение об ошибке в массив ошибок
@@ -353,6 +365,6 @@ customValidation.prototype = {
 };
 
 
-var hash = '#a #aaff #ss #ss  #ff';
+var hash = '#a #aaff #ss #Ss  #ff ';
 var inputCustomValidation = new customValidation();
 inputCustomValidation.checkValidity(hash);
