@@ -326,8 +326,12 @@ customValidation.prototype = {
 
   // Проверка на то, введено не больше пяти хэштегов
   isHashCrowded: function(input) {
-    console.log(this.doHashArray(input).length);
     return this.doHashArray(input).length > this.maxHashNumber;
+  },
+
+  // Проверка на то, что максимальная длина одного хэш-тега 20 символов, включая решётку
+  isHashLengthCrowded: function(input) {
+    return !this.doHashArray(input).every(hash => hash.length <= this.maxHashLength);
   },
 
   checkValidity: function(input) {
@@ -350,12 +354,16 @@ customValidation.prototype = {
     if (this.isHashCrowded(input)) {
       this.addInvalidity('Нельзя указать больше пяти хэш-тегов');
     }
+
+    if (this.isHashLengthCrowded(input)) {
+      this.addInvalidity('Максимальная длина одного хэш-тега 20 символов');
+    }
   },
 
   // Добавляем сообщение об ошибке в массив ошибок
   addInvalidity: function(message) {
-    console.log(message);
     this.invalidities.push(message);
+    console.log(this.invalidities);
   },
 
   // Получаем общий текст сообщений об ошибках
@@ -365,6 +373,6 @@ customValidation.prototype = {
 };
 
 
-var hash = '#a #aaff #ss #Ss  #ff ';
+var hash = '#a #aa #ss #Ss  #ff ';
 var inputCustomValidation = new customValidation();
 inputCustomValidation.checkValidity(hash);
