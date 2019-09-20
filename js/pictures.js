@@ -169,6 +169,8 @@ document.addEventListener('keydown', function(evt) {
 var imgPopupUploadButton = document.querySelector('.img-upload__overlay');
 var imgPopupCloseButton = document.querySelector('#upload-cancel');
 var imgUploadButton = document.querySelector('#upload-file');
+var tagsForm = document.querySelector('.text__hashtags');
+var commentForm = document.querySelector('.text__description');
 
 var showImgUploadPopup = function() {
   imgPopupUploadButton.classList.remove('hidden');
@@ -183,7 +185,9 @@ var closeImgUploadPopup = function() {
 }
 
 var onImgPopupEscPress = function(evt) {
-  if (evt.keyCode === ESC_KEYCODE) {
+  if (evt.keyCode === ESC_KEYCODE &&
+      document.activeElement != tagsForm &&
+      document.activeElement != commentForm) {
     closeImgUploadPopup();
   }
 };
@@ -195,6 +199,7 @@ imgUploadButton.addEventListener('change', function() {
     fr.addEventListener('load', function() {
       document.querySelector('.js__user-upload-img').setAttribute('src', fr.result);
       showImgUploadPopup();
+      document.querySelector('.text__hashtags').focus({preventScroll: true});
     }, false);
 
     fr.readAsDataURL(this.files[0]);
@@ -301,7 +306,7 @@ customValidation.prototype = {
     // Эта штука разбивает строку на массивы по пробелам и
     // удаляет пустые значения массива, если между словами
     // было больше одного пробела. да...
-    return input.split(/\s/).filter(function(value) {return value});
+    return input.toLowerCase().split(/\s/).filter(function(value) {return value});
   },
 
   // Проверка на то, что хэштег начинается с #
@@ -363,16 +368,34 @@ customValidation.prototype = {
   // Добавляем сообщение об ошибке в массив ошибок
   addInvalidity: function(message) {
     this.invalidities.push(message);
-    console.log(this.invalidities);
   },
 
   // Получаем общий текст сообщений об ошибках
   getInvalidities: function() {
     return this.invalidities.join('. \n');
+  },
+
+  // Очищаем поле ошибок
+  clearInvalidities: function() {
+    this.invalidities = [];
   }
 };
 
-
-var hash = '#a #aa #ss #Ss  #ff ';
+var imgForm = document.querySelector('.img-upload__form');
+var tagsInput = imgForm.querySelector('.text__hashtags');
+var formSubmit = imgForm.querySelector('.img-upload__submit');
 var inputCustomValidation = new customValidation();
-inputCustomValidation.checkValidity(hash);
+
+formSubmit.addEventListener('click', function() {
+  tagsInput.setCustomValidity(''); // Очищаем поле ошибок
+  var inputValue = tagsInput.value; // Получаем введенные хэштеги
+  inputCustomValidation.checkValidity(inputValue); // Проверка на валидность
+  var errors = inputCustomValidation.getInvalidities(); // Записываем ошибки
+
+  if (errors) {
+    tagsInput.setCustomValidity(errors); // Показываем ошибки
+    inputCustomValidation.clearInvalidities();
+  } else {
+    tagsInput.setCustomValidity('');
+  }
+});
