@@ -394,8 +394,8 @@ formSubmit.addEventListener('click', function() {
 
   if (errors) {
     tagsInput.setCustomValidity(errors); // Показываем ошибки
-    inputCustomValidation.clearInvalidities();
+    inputCustomValidation.clearInvalidities(); // Очистка массива с ошибками
   } else {
-    tagsInput.setCustomValidity('');
+    tagsInput.setCustomValidity(''); // Оищаем ошибки
   }
 });
