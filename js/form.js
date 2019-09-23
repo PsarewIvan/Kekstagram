@@ -8,6 +8,18 @@
   var tagsForm = document.querySelector('.text__hashtags');
   var commentForm = document.querySelector('.text__description');
 
+  var buttonImgScaleSmaller = document.querySelector('.scale__control--smaller');
+  var buttonImgScaleBigger = document.querySelector('.scale__control--bigger');
+  var imgScaleValue = document.querySelector('.scale__control--value');
+  var userUploadImg = document.querySelector('.js__user-upload-img');
+  var MIN_IMG_SCALE = 25;
+  var MAX_IMG_SCALE = 100;
+  var IMG_SCALE_STEP = 25;
+
+  var effectsList = document.querySelector('.img-upload__effects');
+  var effectSlider = document.querySelector('.img-upload__effect-level');
+
+  // Показ/скрытие редактора загружаемого фото
   var showImgUploadPopup = function () {
     imgPopupUploadButton.classList.remove('hidden');
     document.addEventListener('keydown', onImgPopupEscPress);
@@ -49,14 +61,6 @@
   })
 
   // Редактируем масштаб загружаемого изображения
-  var buttonImgScaleSmaller = document.querySelector('.scale__control--smaller');
-  var buttonImgScaleBigger = document.querySelector('.scale__control--bigger');
-  var imgScaleValue = document.querySelector('.scale__control--value');
-  var userUploadImg = document.querySelector('.js__user-upload-img');
-  var MIN_IMG_SCALE = 25;
-  var MAX_IMG_SCALE = 100;
-  var IMG_SCALE_STEP = 25;
-
   var doImgScaleSmaller = function () {
     var scaleValue = +imgScaleValue.getAttribute('value').slice(0, -1);
     if (scaleValue > MIN_IMG_SCALE) {
@@ -84,9 +88,6 @@
   });
 
   // Наложение эффекта на изображение
-  var effectsList = document.querySelector('.img-upload__effects');
-  var effectSlider = document.querySelector('.img-upload__effect-level');
-
   var removeImgEffects = function () {
     userUploadImg.classList.remove('effects__preview--chrome',
       'effects__preview--sepia',
