@@ -2,7 +2,7 @@
 
 // Работа с формой
 (function () {
-  var imgPopupUploadButton = document.querySelector('.img-upload__overlay');
+  var imgPopupUpload = document.querySelector('.img-upload__overlay');
   var imgPopupCloseButton = document.querySelector('#upload-cancel');
   var imgUploadButton = document.querySelector('#upload-file');
   var tagsForm = document.querySelector('.text__hashtags');
@@ -18,18 +18,26 @@
 
   var effectsList = document.querySelector('.img-upload__effects');
   var effectSlider = document.querySelector('.img-upload__effect-level');
+  var inputNoneEffect = document.querySelector('#effect-none');
+
+  var defaultEffectValues = {
+    imgScale: '100',
+    effect: 'effect-none',
+    effectLevel: '100',
+    hashtags: '',
+    comment: ''
+  }
 
   // Показ/скрытие редактора загружаемого фото
   var showImgUploadPopup = function () {
-    imgPopupUploadButton.classList.remove('hidden');
+    imgPopupUpload.classList.remove('hidden');
     document.addEventListener('keydown', onImgPopupEscPress);
   };
 
   var closeImgUploadPopup = function () {
-    imgPopupUploadButton.classList.add('hidden');
+    imgPopupUpload.classList.add('hidden');
     document.removeEventListener('keydown', onImgPopupEscPress);
-    document.querySelector('.js__user-upload-img').removeAttribute('style');
-    document.querySelector('.scale__control--value').setAttribute('value', '100%');
+    setToDefault();
   }
 
   var onImgPopupEscPress = function (evt) {
@@ -60,6 +68,17 @@
     closeImgUploadPopup();
   })
 
+  // Возврат настроек по умолчанию
+  var setToDefault = function() {
+    userUploadImg.setAttribute('style', 'transform: scale(' + defaultEffectValues.imgScale / 100 + ')');
+    imgScaleValue.setAttribute('value', defaultEffectValues.imgScale + '%');
+    removeImgEffects();
+    hideEffectSlider();
+    inputNoneEffect.checked = true;
+    tagsForm.value = defaultEffectValues.hashtags;
+    commentForm.value = defaultEffectValues.comment;
+  };
+
   // Редактируем масштаб загружаемого изображения
   var doImgScaleSmaller = function () {
     var scaleValue = +imgScaleValue.getAttribute('value').slice(0, -1);
@@ -89,7 +108,8 @@
 
   // Наложение эффекта на изображение
   var removeImgEffects = function () {
-    userUploadImg.classList.remove('effects__preview--chrome',
+    userUploadImg.classList.remove(  //тут лучше переделать, возможно рег.выражения
+      'effects__preview--chrome',
       'effects__preview--sepia',
       'effects__preview--marvin',
       'effects__preview--phobos',
