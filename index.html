@@ -75,7 +75,7 @@
                   </div>
 
                   <!-- Изменение глубины эффекта, накладываемого на изображение -->
-                  <fieldset class="img-upload__effect-level  effect-level">
+                  <fieldset class="img-upload__effect-level  effect-level hidden">
                     <input
                         class="effect-level__value"
                         type="number"
@@ -102,7 +102,8 @@
                           id="effect-none"
                           type="radio"
                           name="effect"
-                          value="none">
+                          value="none"
+                          checked>
                       <label for="effect-none" class="effects__label">
                         <span class="effects__preview  effects__preview--none">Превью фото без эффекта</span>
                         Оригинал
@@ -162,8 +163,7 @@
                           class="effects__radio  visually-hidden"
                           name="effect"
                           id="effect-heat"
-                          value="heat"
-                          checked>
+                          value="heat">
                       <label for="effect-heat" class="effects__label">
                         <span class="effects__preview  effects__preview--heat">Превью эффекта Зной</span>
                         Зной
