@@ -2,7 +2,6 @@
 
 // Работа с формой
 (function () {
-  var ESC_KEYCODE = 27;
   var imgPopupUploadButton = document.querySelector('.img-upload__overlay');
   var imgPopupCloseButton = document.querySelector('#upload-cancel');
   var imgUploadButton = document.querySelector('#upload-file');
@@ -22,7 +21,7 @@
   }
 
   var onImgPopupEscPress = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE &&
+    if (evt.keyCode === window.global.ESC_KEYCODE &&
       document.activeElement != tagsForm &&
       document.activeElement != commentForm) {
       closeImgUploadPopup();
