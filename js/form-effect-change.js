@@ -2,32 +2,32 @@
 
 (function () {
   var levelPin = document.querySelector('.effect-level__pin');
+  var levelBar = document.querySelector('.effect-level__line');
 
   // Изменение глубины эффекта
   levelPin.addEventListener('mousedown', function (evt) {
+
     evt.preventDefault();
 
-    var startCords = {
-      x: evt.clientX
-    };
-    var rightRange = startCords.x;
+    var limitCords;
+    var pinCords;
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
-      var shift = {
-        x: startCords.x - moveEvt.clientX
+      limitCords = {
+        min: levelBar.offsetLeft - levelPin.offsetWidth,
+        max: levelBar.offsetLeft + levelBar.offsetWidth - levelPin.offsetWidth
       };
+      pinCords = levelPin.offsetLeft + moveEvt.movementX;
 
-      startCords = {
-        x: moveEvt.clientX
-      };
-
-      console.log(rightRange + ':' + startCords.x);
-
-      if (shift.x <= rightRange) {
-        levelPin.style.left = (levelPin.offsetLeft - shift.x) + 'px';
+      if (pinCords < limitCords.min) {
+        pinCords = limitCords.min;
       }
+      if (pinCords > limitCords.max) {
+        pinCords = limitCords.max;
+      }
+      levelPin.style.left = pinCords + 'px';
     };
 
     var onMouseUp = function (upEvt) {
