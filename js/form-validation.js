@@ -4,6 +4,7 @@
 (function () {
   var customValidation = function () {};
 
+  // Прототип для валидации хэштегов
   customValidation.prototype = {
     invalidities: [], // Массив с сообщениями об ошибках
     maxHashNumber: 5, // Максимальное количесвто хэштегов
@@ -43,7 +44,7 @@
       return this.doHashArray(input).length > this.maxHashNumber;
     },
 
-    // Проверка на то, что максимальная длина одного хэш-тега 20 символов, включая решётку
+    // Проверка на то, что максимальная длина одного хэштега 20 символов, включая решётку
     isHashLengthCrowded: function (input) {
       return !this.doHashArray(input).every(hash => hash.length <= this.maxHashLength);
     },
