@@ -9,7 +9,7 @@
   var MAX_IMG_SCALE = 100;
   var IMG_SCALE_STEP = 25;
 
-  var effectsList = document.querySelector('.img-upload__effects');
+  var effectsFieldset = document.querySelector('.img-upload__effects');
   var effectSlider = document.querySelector('.img-upload__effect-level');
 
   // Переменные для работы с формой
@@ -24,14 +24,21 @@
       comment: ''
     },
 
+    effectsClassNames: [
+      'effects__preview--chrome',
+      'effects__preview--sepia',
+      'effects__preview--marvin',
+      'effects__preview--phobos',
+      'effects__preview--heat'
+    ],
+
     removeImgEffects: function () {
-      window.form.userUploadImg.classList.remove( //тут лучше переделать, возможно рег.выражения
-        'effects__preview--chrome',
-        'effects__preview--sepia',
-        'effects__preview--marvin',
-        'effects__preview--phobos',
-        'effects__preview--heat'
-      );
+      var imgClassList = this.userUploadImg.classList;
+      for (var i = 0; i < this.effectsClassNames.length; i++) {
+        if (imgClassList.contains(this.effectsClassNames[i])) {
+          imgClassList.remove(this.effectsClassNames[i]);
+        }
+      }
     },
 
     hideEffectSlider: function () {
@@ -91,7 +98,7 @@
     }
   };
 
-  effectsList.addEventListener('click', function (evt) {
+  effectsFieldset.addEventListener('click', function (evt) {
     if (evt.target.name == 'effect') {
       window.form.removeImgEffects();
       changeImgEffects(evt);
