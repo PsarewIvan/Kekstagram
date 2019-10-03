@@ -8,6 +8,7 @@
   var MIN_IMG_SCALE = 25;
   var MAX_IMG_SCALE = 100;
   var IMG_SCALE_STEP = 25;
+  var DEFAULT_EFFECT_VALUE = 100;
 
   var effectsFieldset = document.querySelector('.img-upload__effects');
   var effectSlider = document.querySelector('.img-upload__effect-level');
@@ -24,25 +25,91 @@
       comment: ''
     },
 
-    effectsClassNames: [
-      'effects__preview--chrome',
-      'effects__preview--sepia',
-      'effects__preview--marvin',
-      'effects__preview--phobos',
-      'effects__preview--heat'
+    // Коллекция эффектов
+    effectsCollection: [
+      {
+        filter: 'grayscale',
+        className: 'chrome',
+        units: '',
+        min: 0,
+        max: 1
+      },
+      {
+        filter: 'sepia',
+        className: 'sepia',
+        units: '',
+        min: 0,
+        max: 1
+      },
+      {
+        filter: 'invert',
+        className: 'marvin',
+        units: '%',
+        min: 0,
+        max: 100
+      },
+      {
+        filter: 'blur',
+        className: 'phobos',
+        units: 'px',
+        min: 0,
+        max: 3
+      },
+      {
+        filter: 'brightness',
+        className: 'heat',
+        units: '',
+        min: 1,
+        max: 3
+      }
     ],
 
-    removeImgEffects: function () {
-      var imgClassList = this.userUploadImg.classList;
-      for (var i = 0; i < this.effectsClassNames.length; i++) {
-        if (imgClassList.contains(this.effectsClassNames[i])) {
-          imgClassList.remove(this.effectsClassNames[i]);
-        }
+    // Метод создает массив с классами возможных эффектов
+    getEffectsClassNames: function () {
+      var effectList = [];
+      for (var i = 0; i < this.effectsCollection.length; i++) {
+        effectList[i] = 'effects__preview--' + this.effectsCollection[i].className;
       }
+      return effectList;
     },
 
+    // Метод добавляет к элументу(element) фильтр из коллекции window.form.effectsCollection
+    // под индексом effectIndex и со значением value
+    addFIlterDepth: function (element, value, effectIndex) {
+      var effect = this.effectsCollection[effectIndex];
+      var attrValue = (effect.max - effect.min) / 100 * value;
+      var filterAtrr = effect.filter + '(' + attrValue + effect.units + ')';
+      element.style.filter = filterAtrr;
+      element.style['-webkit-filter'] = filterAtrr;
+    },
+
+    // Метод убирает все эффекты с изображения
+    removeImgEffects: function () {
+      var imgClassList = this.userUploadImg.classList;
+      var effectsClassList = this.getEffectsClassNames();
+      for (var i = 0; i < effectsClassList.length; i++) {
+        if (imgClassList.contains(effectsClassList[i])) {
+          imgClassList.remove(effectsClassList[i]);
+        }
+      }
+      // Убирает инлайновые стили из html
+      this.userUploadImg.style.filter = '';
+      this.userUploadImg.style['-webkit-filter'] = '';
+    },
+
+    // Устанавливает значение инпута в дефолтное состояние
+    setDefaultEffectValue: function() {
+      document.querySelector('.effect-level__value').value = DEFAULT_EFFECT_VALUE;
+    },
+
+    // Скрывает слайдер глубины эффекта
     hideEffectSlider: function () {
       effectSlider.classList.add('hidden');
+    },
+
+    // Перемещает пин на штатное место
+    setPinToDefault: function() {
+      document.querySelector('.effect-level__pin').style.left = '';
     }
   }
 
@@ -82,25 +149,19 @@
   var changeImgEffects = function (evt) {
     if (evt.target.value == 'none') {
       window.form.removeImgEffects();
+      window.form.setDefaultEffectValue();
       window.form.hideEffectSlider();
-    } else if (evt.target.value == 'chrome') {
-      addEffectClassMod('chrome')
-    } else if (evt.target.value == 'sepia') {
-      addEffectClassMod('sepia')
-    } else if (evt.target.value == 'marvin') {
-      addEffectClassMod('marvin')
-    } else if (evt.target.value == 'phobos') {
-      addEffectClassMod('phobos')
-    } else if (evt.target.value == 'heat') {
-      addEffectClassMod('heat')
+      window.form.setPinToDefault();
     } else {
-      window.form.removeImgEffects();
+      addEffectClassMod(evt.target.value);
     }
   };
 
   effectsFieldset.addEventListener('click', function (evt) {
     if (evt.target.name == 'effect') {
       window.form.removeImgEffects();
+      window.form.setDefaultEffectValue();
+      window.form.setPinToDefault();
       changeImgEffects(evt);
     }
   });
